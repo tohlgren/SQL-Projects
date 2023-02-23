@@ -1,0 +1,53 @@
+--SELECT STAR SQL
+
+--
+--CLAIMS OF INNOCENCE
+--
+SELECT *
+FROM TX_Deathrow
+
+--How many inmates were over the age of 50 at execution time?
+SELECT 
+	COUNT(*)
+	FROM TX_Deathrow t
+	WHERE Age_at_Execution > 50
+
+--Find the number of inmates who have declined to give a last statement. 
+SELECT 
+	COUNT(*)
+	FROM TX_Deathrow t
+	WHERE Last_Statement is null 
+
+SELECT 
+	COUNT(CASE WHEN Last_Statement is null then 1 else null end) 
+	FROM TX_Deathrow t
+
+
+SELECT 
+	COUNT(*) - COUNT(Last_statement)
+	FROM TX_Deathrow t
+
+--Find the minimum, maximum, and aveage age of inmates at the time of execution
+SELECT 
+	MIN(Age_at_execution) 'Min Age'
+	,MAX(Age_at_execution) 'Max Age'
+	,AVG(Age_at_execution) 'Avg Age'
+	FROM TX_Deathrow t
+
+--Find the average length (based on character count) of last statements in the dataset
+SELECT 
+	AVG(LEN(last_statement))
+	FROM TX_Deathrow t
+	WHERE last_statement is not null
+
+--List all the counties in the database without duplication
+SELECT 
+	DISTINCT Native_County
+	FROM TX_Deathrow t
+	WHERE native_county is not null
+
+--Find the proportion of inmates with claims of innocence in their last statements
+SELECT 
+	1.0 *
+	COUNT(CASE WHEN last_statement like '%innocent%' then 1 else null end) / COUNT(*)
+	FROM TX_Deathrow t
